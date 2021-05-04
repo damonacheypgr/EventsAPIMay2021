@@ -14,10 +14,28 @@ namespace EventsAPI.Controllers
     {
 
         private readonly EventsDataContext _context;
+        private readonly IEmployeeService _employeeService;
 
-        public EventsController(EventsDataContext context)
+        public EventsController(EventsDataContext context, IEmployeeService employeeService)
         {
             _context = context;
+            _employeeService = employeeService;
+        }
+
+        [HttpHead("{id:int}")]
+        public async Task<ActionResult> CheckForEmployee(int id)
+        {
+            var any = await _context.Employees.Where(e => e.Id == id && e.IsActive).AnyAsync();
+
+            return any ? Ok() : NotFound();
+        }
+
+        [HttpHead("/emails/{emailAddress}")]
+        public async Task<ActionResult> CheckForEmailAddress(string email)
+        {
+            var any = await _context.Employees.Where(e => e.IsActive && e.EMail == email).AnyAsync();
+
+            return any ? Ok() : NotFound();
         }
 
         [HttpGet("{id:int}/participants/{employeeId:int}")]
@@ -34,6 +52,8 @@ namespace EventsAPI.Controllers
             {
                 return NotFound("No event with that id");
             }
+
+            bool employeeIsActive = await _employeeService.IsActiveAsync(id);
 
             //EventParticipant participant = new();
             var participant = new EventParticipant
