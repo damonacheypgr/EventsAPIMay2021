@@ -11,10 +11,12 @@ namespace EventsAPI.Controllers
     public class EventRegistrationsController : ControllerBase
     {
         public readonly EventsDataContext _context;
+        public readonly EventRegistrationChannel _channel;
 
-        public EventRegistrationsController(EventsDataContext context)
+        public EventRegistrationsController(EventsDataContext context, EventRegistrationChannel channel)
         {
             _context = context;
+            _channel = channel;
         }
 
         [HttpPost("events/{eventId;int}/registrations")]
@@ -36,6 +38,12 @@ namespace EventsAPI.Controllers
 
             savedEvent.Registrations.Add(registration);
             await _context.SaveChangesAsync();
+            var worked = await _channel.AddRegistration(new EventRegistrationChannelRequest(registration.Id));
+
+            if (!worked)
+            {
+                // TODO:
+            }
 
             return CreatedAtRoute(
                 "get-event-reservation",

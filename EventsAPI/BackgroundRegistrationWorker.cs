@@ -37,7 +37,6 @@ namespace EventsAPI
 
                 if (await client.CheckEmployeeIsActive(registration.RegistrationId))
                 {
-
                     savedRegistration.Status = EventRegistrationStatus.Approved;
                 }
                 else

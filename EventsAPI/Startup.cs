@@ -48,6 +48,7 @@ namespace EventsAPI
                 Configuration.GetSection(ApiOptions.Section)
                 );
 
+            services.AddSingleton<EventRegistrationChannel>();
             services.AddHostedService<BackgroundRegistrationWorker>();
         }
 
