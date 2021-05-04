@@ -14,6 +14,7 @@ namespace EventsAPI.Data
         public DateTime StartDateAndTime { get; set; }
         public DateTime EndDateAndTime { get; set; }
         public IList<EventParticipant> Participants { get; set; }
+        public IList<EventRegistration> Registrations { get; set; } = new List<EventRegistration>();
     }
 
     public class EventParticipant

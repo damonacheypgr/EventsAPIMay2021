@@ -28,7 +28,11 @@ namespace EventsAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient<ILookupEmployees, HttpEmployeeLookup>();
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.IgnoreNullvalues = true;
+                options.JsonSerializerOptions.
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventsAPI", Version = "v1" });
