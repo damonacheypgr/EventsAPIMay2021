@@ -19,6 +19,7 @@ namespace EventsAPI.Data
     public class EventParticipant
     {
         public int Id { get; set; }
+        public int EmployeeId { get; set; }
         public string Name { get; set; }
         public string EMail { get; set; }
         public string Phone { get; set; }

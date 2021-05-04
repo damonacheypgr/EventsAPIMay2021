@@ -20,6 +20,41 @@ namespace EventsAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("{id:int}/participants/{employeeId:int}")]
+        public async Task<ActionResult> GetParticipantForEvent(int id, int employeeId)
+        {
+            return Redirect("http://localhost:1337/employee/" + employeeId);
+        }
+
+        [HttpPost("{id:int}/participants")]
+        public async Task<ActionResult> AddParticipant(int id, [FromBody] PostParticipantsRequest request)
+        {
+            var savedEvent = await _context.Events.SingleOrDefaultAsync(e => e.Id == id);
+            if (savedEvent == null)
+            {
+                return NotFound("No event with that id");
+            }
+
+            //EventParticipant participant = new();
+            var participant = new EventParticipant
+            {
+                EmployeeId = request.Id,
+                Name = request.FirstName + " " + request.LastName,
+                EMail = request.Email,
+                Phone = request.Phone,
+            };
+
+            if (savedEvent.Participants == null)
+            {
+                savedEvent.Participants = new List<EventParticipant>();
+            }
+
+            savedEvent.Participants.Add(participant);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpGet("{id:int}/participants")] // GET /events/1/partipants
         public async Task<ActionResult> GetPartipantsForEvent(int id)
         {
@@ -109,4 +144,18 @@ namespace EventsAPI.Controllers
         [Required]
         DateTime? EndDateAndTime
         );
+
+    public record PostParticipantsRequest
+    {
+        public int Id { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        //public string Department { get; set; }
+        //public int Salary { get; set; }
+
+        public string Email { get; set; }
+        public string Phone { get; set; }
+    }
 }
