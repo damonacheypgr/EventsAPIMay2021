@@ -29,7 +29,7 @@ namespace EventsAPI
             await foreach(var registration in _channel.ReadAllAsync(stoppingToken))
             {
                 using var scope = _serviceProvider.CreateScope();
-                var client = scope.ServiceProvider.GetRequiredService<HttpEmployeeLookup>();
+                var client = scope.ServiceProvider.GetRequiredService<ILookupEmployees>();
                 var context = scope.ServiceProvider.GetRequiredService<EventsDataContext>();
 
                 var savedRegistration = await context.EventRegistrations
