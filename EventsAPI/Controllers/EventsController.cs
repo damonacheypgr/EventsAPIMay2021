@@ -31,9 +31,9 @@ namespace EventsAPI.Controllers
         }
 
         [HttpHead("/emails/{emailAddress}")]
-        public async Task<ActionResult> CheckForEmailAddress(string email)
+        public async Task<ActionResult> CheckForEmailAddress(string emailAddress)
         {
-            var any = await _context.Employees.Where(e => e.IsActive && e.EMail == email).AnyAsync();
+            var any = await _context.Employees.Where(e => e.IsActive && e.EMail == emailAddress).AnyAsync();
 
             return any ? Ok() : NotFound();
         }
