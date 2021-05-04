@@ -34,7 +34,7 @@ namespace EventsAPI.Controllers
             }
             else
             {
-                return Ok(data.Participants);
+                return Ok(new { data = data.Participants } );
             }
         }
 
