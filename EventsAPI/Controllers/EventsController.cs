@@ -23,21 +23,19 @@ namespace EventsAPI.Controllers
         [HttpGet("{id:int}/participants")] // GET /events/1/partipants
         public async Task<ActionResult> GetPartipantsForEvent(int id)
         {
-            var savedEvent = await _context.Events.Where(e => e.Id == id).SingleOrDefaultAsync();
-            if (savedEvent == null)
+            var data = await _context.Events
+                .Where(e => e.Id == id)
+                .Select(e => new { e.Id, e.Participants })
+                .SingleOrDefaultAsync();
+
+            if (data == null)
             {
                 return NotFound();
             }
-            // ??? Run the query again?
-            var participants = await _context.Events
-                .Where(e => e.Id == id)
-                .Select(e => e.Participants)
-                .ToListAsync();
-
-            return Ok(participants); // Bad again!
-
-
-
+            else
+            {
+                return Ok(data.Participants);
+            }
         }
 
 
