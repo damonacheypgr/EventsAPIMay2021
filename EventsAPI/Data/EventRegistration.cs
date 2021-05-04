@@ -16,6 +16,6 @@ namespace EventsAPI.Data
         public string Phone { get; set; }
 
         public EventRegistrationStatus Status { get; set; }
-        public string ReasonFoDenial { get; set; }
+        public string ReasonForDenial { get; set; }
     }
 }

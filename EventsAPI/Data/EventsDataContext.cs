@@ -17,5 +17,7 @@ namespace EventsAPI.Data
         public DbSet<Event> Events { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
+
+        public DbSet<EventRegistration> EventRegistrations { get; set; }
     }
 }

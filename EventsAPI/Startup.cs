@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace EventsAPI
@@ -30,8 +31,8 @@ namespace EventsAPI
             services.AddHttpClient<ILookupEmployees, HttpEmployeeLookup>();
             services.AddControllers().AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.IgnoreNullvalues = true;
-                options.JsonSerializerOptions.
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
             services.AddSwaggerGen(c =>
             {
@@ -46,6 +47,8 @@ namespace EventsAPI
             services.Configure<ApiOptions>(
                 Configuration.GetSection(ApiOptions.Section)
                 );
+
+            services.AddHostedService<BackgroundRegistrationWorker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
