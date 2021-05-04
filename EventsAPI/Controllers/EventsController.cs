@@ -44,10 +44,7 @@ namespace EventsAPI.Controllers
                 Phone = request.Phone,
             };
 
-            if (savedEvent.Participants == null)
-            {
-                savedEvent.Participants = new List<EventParticipant>();
-            }
+            savedEvent.Participants ??= new List<EventParticipant>();
 
             savedEvent.Participants.Add(participant);
             await _context.SaveChangesAsync();
