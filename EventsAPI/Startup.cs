@@ -27,7 +27,7 @@ namespace EventsAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddHttpClient<ILookupEmployees, HttpEmployeeLookup>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -38,6 +38,10 @@ namespace EventsAPI
             {
                 options.UseSqlServer(Configuration.GetConnectionString("events"));
             });
+
+            services.Configure<ApiOptions>(
+                Configuration.GetSection(ApiOptions.Section)
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +53,12 @@ namespace EventsAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventsAPI v1"));
             }
+
+            app.Use(async (req, next) =>
+            {
+                await Task.Delay(1500);
+                await next.Invoke();
+            });
 
             app.UseRouting();
 

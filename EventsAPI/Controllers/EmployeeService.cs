@@ -22,9 +22,8 @@ namespace EventsAPI.Controllers
 
         public async Task<bool> IsActiveAsync(int id)
         {
-
-
-            var response = await _client.GetAsync("employees/" + id);
+            var request = new HttpRequestMessage(HttpMethod.Head, "employees/" + id);
+            var response = await _client.SendAsync(request);
 
             return response.IsSuccessStatusCode;
         }
