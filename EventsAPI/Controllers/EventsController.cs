@@ -25,7 +25,12 @@ namespace EventsAPI.Controllers
         {
             var data = await _context.Events
                 .Where(e => e.Id == id)
-                .Select(e => new { e.Id, e.Participants })
+                .Select(e => new
+                {
+                    e.Id,
+                    Participants = e.Participants
+                        .Select(p => new GetParticipantResponse(p.Id, p.Name, p.EMail, p.Phone))
+                })
                 .SingleOrDefaultAsync();
 
             if (data == null)
@@ -34,7 +39,7 @@ namespace EventsAPI.Controllers
             }
             else
             {
-                return Ok(new { data = data.Participants } );
+                return Ok(new { data = data.Participants });
             }
         }
 
